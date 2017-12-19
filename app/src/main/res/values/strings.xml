@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">zadanie9</string>
+    <string name="tvBottomText">tvBottomText</string>
+    <string name="btnBottomText">Close</string>
+    <string name="item1">Menu</string>
+    <string name="group_item1">item1</string>
+    <string name="group_item2">gr2</string>
+    <string name="submenu_title">naciśnięty przycisk OK</string>
+    <string name="submenu_item1">submenu_item</string>
+    <string name="btnCancelText">Cancel</string>
+    <string name="btnOkText">Ok</string>
+</resources>
