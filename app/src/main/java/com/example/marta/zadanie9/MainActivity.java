@@ -1,34 +1,60 @@
 package com.example.marta.zadanie9;
-
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+// Nasza Klasa MainActivity odziedziczy od ActionBarActivity i interfejsu OnClickListener
+public class MainActivity extends AppCompatActivity implements OnClickListener {
 
-    private TextView tvBottom;
-    private Button btnOk;
-    private Button btnCancel;
+    TextView tvOut;
+    Button btnOk;
+    Button btnCancel;
+
+    // realizujemy metody onClick interfejsu OnClickListener
+    public void onClick(View v) {
+        // przez id zdefiniujemy przycisk, który spowodował moduł obsługi
+        switch (v.getId()) {
+            case R.id.btnOk:
+                // przycisk ОК
+                tvOut.setText("jest wciśnięty przycisk ОК");
+                break;
+            case R.id.btnCancel:
+                // przycisk Cancel
+                tvOut.setText("jest wciśnięty przycisk Cancel");
+                break;
+            case R.id.btnStart:
+                // przycisk Start
+                tvOut.setText("jest wciśnięty przycisk Start");
+                break;
+        }
+    }
+
+    public void onClickStart(View v) {
+        //działania poprzez naciśnięcie przycisku
+        tvOut = (TextView) findViewById(R.id.tvOut);
+        tvOut.setText("jest wciśnięty przycisk Start!");
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        LinearLayout llBottom = (LinearLayout) findViewById(R.id.llBottom);
-        TextView tvBottom = (TextView) findViewById(R.id.tvBottom);
-        Button btnOk = (Button) findViewById(R.id.btnOk);
-        Button btnCancel = (Button) findViewById(R.id.btnCancel);
+        //znajdziemy View-elementy
+        tvOut = (TextView) findViewById(R.id.tvOut);
+        btnOk = (Button) findViewById(R.id.btnOk);
+        btnCancel = (Button) findViewById(R.id.btnCancel);
 
-        llBottom.setBackgroundResource(R.color.llBottomColor);
-        tvBottom.setText(R.string.tvBottomText);
-        btnCancel.setText(R.string.btnCancelText);
-        btnOk.setText(R.string.btnOkText);
+        // this - to faktycznie nasz obiekt activity typu MainActivity
+        // on jest procedurę obsługi zdarzenia naciśnięcie
+
+        btnOk.setOnClickListener(this);
+        btnCancel.setOnClickListener(this);
 
 
     }
@@ -54,10 +80,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onClick(View view) {
-
     }
 }
