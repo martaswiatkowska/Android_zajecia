@@ -9,4 +9,6 @@
     <string name="submenu_item1">submenu_item</string>
     <string name="btnCancelText">Cancel</string>
     <string name="btnOkText">Ok</string>
+    <string name="tvTopText">górny tekst</string>
+    <string name="btnTopText">górny przycisk</string>
 </resources>

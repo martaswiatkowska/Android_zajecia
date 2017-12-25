@@ -9,7 +9,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity {
 
     private TextView tvBottom;
     private Button btnOk;
@@ -19,18 +19,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+//  низ
         LinearLayout llBottom = (LinearLayout) findViewById(R.id.llBottom);
         TextView tvBottom = (TextView) findViewById(R.id.tvBottom);
-        Button btnOk = (Button) findViewById(R.id.btnOk);
-        Button btnCancel = (Button) findViewById(R.id.btnCancel);
+        Button btnBottom = (Button) findViewById(R.id.btnBottom);
 
         llBottom.setBackgroundResource(R.color.llBottomColor);
         tvBottom.setText(R.string.tvBottomText);
-        btnCancel.setText(R.string.btnCancelText);
-        btnOk.setText(R.string.btnOkText);
-
-
+        btnBottom.setText(R.string.btnBottomText);
     }
 
 
@@ -54,10 +50,4 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onClick(View view) {
-
-    }
-}
+    }}
