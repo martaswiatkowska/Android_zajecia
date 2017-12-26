@@ -12,37 +12,26 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-public class MainActivity extends AppCompatActivity  implements View.OnClickListener {
-    TextView tvOut;
-    Button btnOk;
-    Button btnCancel;
+public class MainActivity extends AppCompatActivity {
+    private Menu menu;
 
-    private static final String TAG = "myLogs";
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        // znajdziemy View-elementy
-        Log.d(TAG, "znajdziemy View-elementy");
-        tvOut = (TextView) findViewById(R.id.tvOut);
-        btnOk = (Button) findViewById(R.id.btnOk);
-        btnCancel = (Button) findViewById(R.id.btnCancel);
-
-        // przypisać procedurę obsługi do przycisków
-        Log.d(TAG, " przypisać procedurę obsługi do przycisków");
-        btnOk.setOnClickListener(this);
-        btnCancel.setOnClickListener(this);
-
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+
+        menu.add("menu1");
+        menu.add("menu2");
+        menu.add("menu3");
+        menu.add("menu4");
+
+        return super.onCreateOptionsMenu(menu);
+        // zwraca wynik operacji tworzenia menu
     }
 
     @Override
@@ -54,29 +43,14 @@ public class MainActivity extends AppCompatActivity  implements View.OnClickList
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+
             return true;
         }
 
+        // 1) Tworzenie wiadomości wyskakujący                 2) pokazać go
+        Toast.makeText(this, item.getTitle(), Toast.LENGTH_SHORT).show();
+        // zwróci z metody, wywołujemy metodę rodzica onOptionsItemSelected i przekażemy mu item
         return super.onOptionsItemSelected(item);
     }
-
-    @Override
-    public void onClick(View v) {
-        // przez id zdefiniować przycisk, który spowodował procedurę obsługi
-        Log.d(TAG, "przez id zdefiniować przycisk, który spowodował procedurę obsługi");
-        switch (v.getId()) {
-            case R.id.btnOk:
-                // przycisk ОК
-                Log.d(TAG, "przycisk ОК");
-                Toast.makeText(this, "jest naciśnięty przycisk ОК", Toast.LENGTH_LONG).show();
-                tvOut.setText("jest naciśnięty przycisk ОК");
-                break;
-            case R.id.btnCancel:
-                // przycisk Cancel
-                Log.d(TAG, "przycisk Cancel");
-                Toast.makeText(this, "jest naciśnięty przycisk Cancel", Toast.LENGTH_LONG).show();
-                tvOut.setText("jest naciśnięty przycisk Cancel");
-                break;
-        }
-    }
 }
+
