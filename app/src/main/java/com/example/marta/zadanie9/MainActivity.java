@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -36,9 +37,27 @@ public class MainActivity extends AppCompatActivity {
         tvColor = (TextView) findViewById(R.id.tvColor);
         tvSize = (TextView) findViewById(R.id.tvSize);
 
+        tvColor.setOnLongClickListener(new View.OnLongClickListener() {
+
+            @Override
+            public boolean onLongClick(View v) {
+                // TODO Auto-generated method stub
+                return false;
+            }
+        });
+
+        tvSize.setOnLongClickListener(new View.OnLongClickListener() {
+
+            @Override
+            public boolean onLongClick(View v) {
+                // TODO Auto-generated method stub
+                return false;
+            }
+        });
         //
         registerForContextMenu(tvColor);
         registerForContextMenu(tvColor);
+
         registerForContextMenu(lv);
     }
 
