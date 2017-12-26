@@ -2,31 +2,39 @@ package com.example.marta.zadanie9;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
+
 import android.widget.TextView;
+import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
 
-    private TextView tvBottom;
-    private Button btnOk;
-    private Button btnCancel;
+public class MainActivity extends AppCompatActivity  implements View.OnClickListener {
+    TextView tvOut;
+    Button btnOk;
+    Button btnCancel;
+
+    private static final String TAG = "myLogs";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//  низ
-        LinearLayout llBottom = (LinearLayout) findViewById(R.id.llBottom);
-        TextView tvBottom = (TextView) findViewById(R.id.tvBottom);
-        Button btnBottom = (Button) findViewById(R.id.btnBottom);
 
-        llBottom.setBackgroundResource(R.color.llBottomColor);
-        tvBottom.setText(R.string.tvBottomText);
-        btnBottom.setText(R.string.btnBottomText);
+        // znajdziemy View-elementy
+        Log.d(TAG, "znajdziemy View-elementy");
+        tvOut = (TextView) findViewById(R.id.tvOut);
+        btnOk = (Button) findViewById(R.id.btnOk);
+        btnCancel = (Button) findViewById(R.id.btnCancel);
+
+        // przypisać procedurę obsługi do przycisków
+        Log.d(TAG, " przypisać procedurę obsługi do przycisków");
+        btnOk.setOnClickListener(this);
+        btnCancel.setOnClickListener(this);
+
     }
 
 
@@ -50,4 +58,25 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }}
+    }
+
+    @Override
+    public void onClick(View v) {
+        // przez id zdefiniować przycisk, który spowodował procedurę obsługi
+        Log.d(TAG, "przez id zdefiniować przycisk, który spowodował procedurę obsługi");
+        switch (v.getId()) {
+            case R.id.btnOk:
+                // przycisk ОК
+                Log.d(TAG, "przycisk ОК");
+                Toast.makeText(this, "jest naciśnięty przycisk ОК", Toast.LENGTH_LONG).show();
+                tvOut.setText("jest naciśnięty przycisk ОК");
+                break;
+            case R.id.btnCancel:
+                // przycisk Cancel
+                Log.d(TAG, "przycisk Cancel");
+                Toast.makeText(this, "jest naciśnięty przycisk Cancel", Toast.LENGTH_LONG).show();
+                tvOut.setText("jest naciśnięty przycisk Cancel");
+                break;
+        }
+    }
+}
