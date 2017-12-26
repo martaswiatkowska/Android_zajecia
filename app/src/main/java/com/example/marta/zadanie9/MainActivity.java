@@ -2,54 +2,70 @@ package com.example.marta.zadanie9;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-
+import android.widget.CheckBox;
 import android.widget.TextView;
-import android.widget.Toast;
+
 
 
 public class MainActivity extends AppCompatActivity {
-    private Menu menu;
+    // Elementy Ekranu
+    TextView tv;
+    CheckBox chb;
 
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // znajdziemy elementy
+        tv = (TextView) findViewById(R.id.textView);
+        chb = (CheckBox) findViewById(R.id.chbExtMenu);
+
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
 
-        menu.add("menu1");
-        menu.add("menu2");
-        menu.add("menu3");
-        menu.add("menu4");
+        // dodaj pozycji menu
+        menu.add(0, 1, 0, "add");
+        menu.add(0, 2, 0, "edit");
+        menu.add(0, 3, 3, "delete");
+        menu.add(1, 4, 1, "copy");
+        menu.add(1, 5, 2, "paste");
+        menu.add(1, 6, 4, "exit");
+
+        // metoda N 2 poprzez xml- pliku
+        //getMenuInflater().inflate(R.menu.my_menu, menu);
+
 
         return super.onCreateOptionsMenu(menu);
-        // zwraca wynik operacji tworzenia menu
     }
+
+    // aktualizacja menu
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        // elementy menu z grupy o ID = 1 będą widoczne
+        menu.setGroupVisible(1, chb.isChecked());
+        return super.onPrepareOptionsMenu(menu);
+    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        StringBuilder sb = new StringBuilder();
 
-            return true;
-        }
+        // Wpisanie do  TextView informacji o pozycji elementu w menu
+        sb.append("Item Menu");
+        sb.append("\r\n groupId: " + String.valueOf(item.getGroupId()));
+        sb.append("\r\n itemId: " + String.valueOf(item.getItemId()));
+        sb.append("\r\n order: " + String.valueOf(item.getOrder()));
+        sb.append("\r\n title: " + item.getTitle());
+        tv.setText(sb.toString());
 
-        // 1) Tworzenie wiadomości wyskakujący                 2) pokazać go
-        Toast.makeText(this, item.getTitle(), Toast.LENGTH_SHORT).show();
-        // zwróci z metody, wywołujemy metodę rodzica onOptionsItemSelected i przekażemy mu item
         return super.onOptionsItemSelected(item);
     }
 }
