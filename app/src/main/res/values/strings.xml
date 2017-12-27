@@ -12,5 +12,5 @@
     <string name="tvTopText">górny tekst</string>
     <string name="btnTopText">górny przycisk</string>
     <string name="hello_world">hello world</string>
-    <string name="action_settings">action_setting</string>
+    <string name="action_settings">setting</string>
 </resources>
