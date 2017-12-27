@@ -2,42 +2,36 @@ package com.example.marta.zadanie9;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.RadioGroup;
-import android.widget.Toast;
+import android.widget.SeekBar;
 
 
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-    LinearLayout llMain;
-    RadioGroup rgGravity;
-    EditText etName;
-    Button btnCreate;
-    Button btnClear;
-
-    int wrapContent = LinearLayout.LayoutParams.WRAP_CONTENT;
+public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBarChangeListener {
+    SeekBar sbWeight;
+    Button btn1;
+    Button btn2;
+    LinearLayout.LayoutParams lParams1;
+    LinearLayout.LayoutParams lParams2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        llMain = (LinearLayout) findViewById(R.id.llMain);
-        rgGravity = (RadioGroup) findViewById(R.id.rgGravity);
-        etName = (EditText) findViewById(R.id.etName);
+        sbWeight = (SeekBar) findViewById(R.id.sbWeight);
+        //dodanie lisenera do sbWeight
+        sbWeight.setOnSeekBarChangeListener(this);
 
-        btnCreate = (Button) findViewById(R.id.btnCreate);
-        //dodanie Lisenera do elementu
-        btnCreate.setOnClickListener(this);
+        btn1 = (Button) findViewById(R.id.btn1);
+        btn2 = (Button) findViewById(R.id.btn2);
 
-        btnClear = (Button) findViewById(R.id.btnClear);
-        btnClear.setOnClickListener(this);
+        lParams1 = (LinearLayout.LayoutParams) btn1.getLayoutParams();
+        lParams2 = (LinearLayout.LayoutParams) btn2.getLayoutParams();
+
     }
 
     @Override
@@ -58,52 +52,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
+    //Ta funkcja jest wywoływana podczas przesówania elementu na elemencie SeekBaar
     @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.btnCreate:
-                // Tworzenie LayoutParams z szerokości i wysokości ze zawartości
+    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+        int leftValue = progress;
+        int rightValue = seekBar.getMax() - progress;
+        // dostosowywać  waga      lParams1.weight = leftValue;
 
-                LinearLayout.LayoutParams lParams = new LinearLayout.LayoutParams(
-                        wrapContent, wrapContent);
-                // Zmienna przechowywania wartości wyrównania
-                // Domyślną niech będzie LEFT
-                int btnGravity = Gravity.LEFT;
-                // definiuemy, jaki RadioButton " pole wyboru wykożysta " i
-          // odpowiednio wypełnić btnGravity
-                switch (rgGravity.getCheckedRadioButtonId()) {
-                    case R.id.rbLeft:
-                        btnGravity = Gravity.LEFT;
-                        break;
-                    case R.id.rbCenter:
-                        btnGravity = Gravity.CENTER_HORIZONTAL;
-                        break;
-                    case R.id.rbRight:
-                        btnGravity = Gravity.RIGHT;
-                        break;
-                }
-                // przenieść otrzymaną wartość  wyrównania w LayoutParams
-                lParams.gravity = btnGravity;
 
-                // srworzymy Button, napiszemy tekst i dodajmy w LinearLayout
-                Button btnNew = new Button(this);
-                //ustaw tekst wpisany do elementu etName
-                btnNew.setText(etName.getText().toString());
-                //dodanie nowoutworzonego elementu do głównego layoutu
-                llMain.addView(btnNew, lParams);
+        lParams1.weight = leftValue;
+        // wpisać wartośći zmiennych jako teksty przycisków
+        btn1.setText(String.valueOf(leftValue));
+        btn2.setText(String.valueOf(rightValue));
+    }
 
-                break;
-            case R.id.btnClear:
-                //usunęcie wszystkich elementów
-                llMain.removeAllViews();
-                //Wyświetl tekst o usuniętych elementach
-                Toast.makeText(this, " Usunięto ", Toast.LENGTH_SHORT).show();
-                break;
-        }
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {
+
+    }
+
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {
+
     }
 }
 
