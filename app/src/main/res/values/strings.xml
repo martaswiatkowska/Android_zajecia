@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">zadanie21</string>
+    <string name="app_name">zadania</string>
     <string name="app_name_two">activity 2</string>
     <string name="tvBottomText">tvBottomText</string>
     <string name="btnBottomText">Close</string>
