@@ -14,4 +14,7 @@
     <string name="btnTopText">górny przycisk</string>
     <string name="hello_world">hello world</string>
     <string name="action_settings">setting</string>
+    <string name="title_activity_time">ActivityTime</string>
+    <string name="title_activity_date">Basic Date</string>
+    <string name="title_activity_date_ex">Extended Date</string>
 </resources>

@@ -10,61 +10,33 @@ import android.widget.Button;
 
 public class MainActivity extends Activity implements View.OnClickListener {
 
-    final String TAG = "States";
-
-    Button btnActTwo;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        btnActTwo = (Button) findViewById(R.id.btnActTwo);
-        btnActTwo.setOnClickListener(this);
 
-        Log.d(TAG, "MainActivity: onCreate()");
-    }
+        Button btnTime = (Button) findViewById(R.id.btnTime);
+        Button btnDate = (Button) findViewById(R.id.btnDate);
 
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        Log.d(TAG, "MainActivity: onRestart()");
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Log.d(TAG, "MainActivity: onStart()");
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.d(TAG, "MainActivity: onResume()");
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Log.d(TAG, "MainActivity: onPause()");
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        Log.d(TAG, "MainActivity: onStop()");
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Log.d(TAG, "MainActivity: onDestroy()");
+        btnTime.setOnClickListener(this);
+        btnDate.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
-        Intent intent = new Intent(this, MainActivityTwo.class);
-        startActivity(intent);
+        Intent intent;
+
+        switch(v.getId()) {
+            case R.id.btnTime:
+                intent = new Intent("edu.android.intent.action.showtime");
+                startActivity(intent);
+                break;
+            case R.id.btnDate:
+                intent = new Intent("edu.android.intent.action.showdate");
+                startActivity(intent);
+                break;
+        }
     }
 }
 
