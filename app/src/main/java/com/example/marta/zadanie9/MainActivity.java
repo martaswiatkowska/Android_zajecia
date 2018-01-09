@@ -1,98 +1,95 @@
 package com.example.marta.zadanie9;
 
+import android.annotation.TargetApi;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.net.Uri;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.ContextMenu;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.TextView;
 
 
 public class MainActivity extends AppCompatActivity {
-    // Stale dla ID elementow menu
-    final int MENU_ALPHA_ID = 1;
-    final int MENU_SCALE_ID = 2;
-    final int MENU_TRANSLATE_ID = 3;
-    final int MENU_ROTATE_ID = 4;
-    final int MENU_COMBO_ID = 5;
-
-    TextView tv;
+    // identyfikator notyfikacji
+    private static final int NOTIFY_ID = 101;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        tv = (TextView) findViewById(R.id.tv);
-        // zarejestruj menu kontekstowe dla komponentu tv
-        registerForContextMenu(tv);
     }
 
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        switch (v.getId()) {
-            case R.id.tv:
-                // dodawanie elementów
-                menu.add(0, MENU_ALPHA_ID, 0, "alpha");
-                menu.add(0, MENU_SCALE_ID, 0, "scale");
-                menu.add(0, MENU_TRANSLATE_ID, 0, "translate");
-                menu.add(0, MENU_ROTATE_ID, 0, "rotate");
-                menu.add(0, MENU_COMBO_ID, 0, "combo");
-                break;
+
+
+        @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+        public void onClick(View view) {// funkcja zwraca kontekst aplikacji uruchomionej
+            Context context = getApplicationContext();// pobrać referencję do procesu uruchomionego
+            // https://developer.android.com/reference/android/content/Intent.html
+            Intent notificationIntent = new Intent(Intent.ACTION_VIEW,//przygotowanie się do przejścia do strony internetowej
+                    Uri.parse("http://www.agh.edu.pl"));
+            PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent,
+                    PendingIntent.FLAG_CANCEL_CURRENT);
+            notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
+            Resources res = context.getResources();//uzyskanie zasobów naszej aplikacji
+            final Notification.Builder builder = new Notification.Builder(context);
+
+            builder.setContentIntent(contentIntent)//konstruujemy naszej notyfikacji(zawartość)
+                    .setSmallIcon(R.drawable.kitty)
+                    // duży obraz
+                    .setLargeIcon(BitmapFactory.decodeResource(res, R.drawable.kitty))
+                    .setTicker("Uwaga! kot spożywa swoje jedzenie - prośba mu nie przeszkadzać.")
+                    .setWhen(System.currentTimeMillis())
+                    .setAutoCancel(true)
+                    .setContentTitle("przypomnienie")
+                    .setContentText("Karmienie swego kici! Prosze poczekać... "); // tekst notyfikacji
+
+            Notification notification = builder.build();// stworzymy obiekt typu notyfikacja
+
+            long[] vibrate = new long[] { 1000, 1000, 1000, 1000, 1000 };
+
+            notification.vibrate = vibrate;
+            notification.defaults = Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE;
+            notification.ledARGB = Color.RED;
+            notification.ledOffMS = 0;
+            notification.ledOnMS = 1;
+            notification.flags = notification.flags | Notification.FLAG_SHOW_LIGHTS;
+            // otrzymać dostęp do usługi zarządzania powiadomieniaми
+            final NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+            // pokaz użytkowniku notyfikacje
+            notificationManager.notify(NOTIFY_ID, notification);
+
+            // --- pokazuje postęp realizacji jakiegoś zadania
+            new Thread(
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            for (int i = 0; i <= 100; i += 1) {
+                                builder.setProgress(100, i, false);
+                                notificationManager.notify(NOTIFY_ID, builder.build());
+                                try { // próbować
+                                    // Tworzymy wygląd pracy  (zmuszają strumień spać 250ms)
+                                    Thread.sleep(250);
+                                } catch (InterruptedException e) {
+                                    //złapać błąd, jeśli będzie to przerwać i usunąć
+                                }
+                            }
+                            builder.setContentText("Karmienie kota zakończone!")
+                                    .setProgress(0, 0, false);
+                            notificationManager.notify(NOTIFY_ID, builder.build());
+                        }
+                    }
+            ).start();
+            // ----
         }
-        super.onCreateContextMenu(menu, v, menuInfo);
+
     }
-
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        Animation anim = null;
-        // określić, który element został kliknięty
-        switch (item.getItemId()) {
-            case MENU_ALPHA_ID:
-                // tworzenie obiektu animacja z pliku anim/myalpha
-                anim = AnimationUtils.loadAnimation(this, R.anim.myalpha);
-                break;
-            case MENU_SCALE_ID:
-                anim = AnimationUtils.loadAnimation(this, R.anim.myscale);
-                break;
-            case MENU_TRANSLATE_ID:
-                anim = AnimationUtils.loadAnimation(this, R.anim.mytrans);
-                break;
-            case MENU_ROTATE_ID:
-                anim = AnimationUtils.loadAnimation(this, R.anim.myrotate);
-                break;
-            case MENU_COMBO_ID:
-                anim = AnimationUtils.loadAnimation(this, R.anim.mycombo);
-                break;
-        }
-        // uruchomić animację dla komponent tv
-        tv.startAnimation(anim);
-        return super.onContextItemSelected(item);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-}
 
