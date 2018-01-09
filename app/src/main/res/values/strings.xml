@@ -14,4 +14,7 @@
     <string name="hello_world">hello world</string>
     <string name="action_settings">setting</string>
     <string name="hello_kitty">Hello Kitty</string>
+    <string name="sky">niebo</string>
+    <string name="sun">slonce</string>
+    <string name="grass">trawa</string>
 </resources>
