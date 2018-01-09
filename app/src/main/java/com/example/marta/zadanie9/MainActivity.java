@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         });
         //
         registerForContextMenu(tvColor);
-        registerForContextMenu(tvColor);
+        registerForContextMenu(tvSize);
 
         registerForContextMenu(lv);
     }
