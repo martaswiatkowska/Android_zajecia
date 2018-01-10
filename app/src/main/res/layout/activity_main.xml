@@ -16,6 +16,16 @@
             android:textSize="34dp"
             android:layout_alignParentTop="true"
             android:layout_alignStart="@+id/buttonCreateNotification" />
+        <ImageView
+            android:layout_below="@+id/textView"
+            android:id="@+id/kitty_image"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="150dp"
+            android:src="@drawable/pobrane"
+            />
 
         <Button
             android:layout_width="wrap_content"
@@ -23,9 +33,9 @@
             android:text="Nakarmić kota?"
             android:id="@+id/buttonCreateNotification"
             android:onClick="onClick"
-            android:layout_below="@+id/textView"
+            android:layout_below="@+id/kitty_image"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="101dp" />
+            android:layout_marginTop="50dp" />
 
 
 </RelativeLayout>

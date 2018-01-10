@@ -43,9 +43,9 @@ public class MainActivity extends AppCompatActivity {
             final Notification.Builder builder = new Notification.Builder(context);
 
             builder.setContentIntent(contentIntent)//konstruujemy naszej notyfikacji(zawartość)
-                    .setSmallIcon(R.drawable.kitty)
+                    .setSmallIcon(R.drawable.cat_food)
                     // duży obraz
-                    .setLargeIcon(BitmapFactory.decodeResource(res, R.drawable.kitty))
+                    .setLargeIcon(BitmapFactory.decodeResource(res, R.drawable.cat_food))
                     .setTicker("Uwaga! kot spożywa swoje jedzenie - prośba mu nie przeszkadzać.")
                     .setWhen(System.currentTimeMillis())
                     .setAutoCancel(true)
