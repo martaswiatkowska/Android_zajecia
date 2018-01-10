@@ -5,4 +5,5 @@
     <color name="colorAccent">#FF4081</color>
     <color name="llBottomColor">#82bfe6</color>
     <color name="llTopColor">#336699</color>
+    <color name="activity_color">#cfdde1</color>
 </resources>

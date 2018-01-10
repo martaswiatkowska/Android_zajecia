@@ -17,4 +17,8 @@
     <string name="sky">niebo</string>
     <string name="sun">slonce</string>
     <string name="grass">trawa</string>
+    <string name="radiobutton_eur">EUR</string>
+    <string name="radiobutton_usd">USD</string>
+    <string name="buttonConvert_text">Convert</string>
+    <string name="currency_hint">zloty</string>
 </resources>
