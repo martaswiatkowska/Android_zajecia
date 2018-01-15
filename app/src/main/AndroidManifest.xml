@@ -17,8 +17,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".NameActivity"
-            android:label="@string/title_activity_name" >
+            android:name=".ColorActivity"
+            android:label="@string/title_activity_color" >
+        </activity>
+        <activity
+            android:name=".AlignActivity"
+            android:label="@string/title_activity_align" >
         </activity>
     </application>
 

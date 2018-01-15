@@ -20,4 +20,6 @@
     <string name="title_activity_info">Date/time info</string>
     <string name="title_activity_view">ViewActivity</string>
     <string name="title_activity_name">NameActivity</string>
+    <string name="title_activity_color">Select color</string>
+    <string name="title_activity_align">Select align</string>
 </resources>
