@@ -17,4 +17,5 @@
     <string name="title_activity_time">ActivityTime</string>
     <string name="title_activity_date">Basic Date</string>
     <string name="title_activity_date_ex">Extended Date</string>
+    <string name="title_activity_info">Date/time info</string>
 </resources>

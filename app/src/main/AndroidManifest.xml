@@ -17,25 +17,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ActivityTime"
-            android:label="@string/title_activity_time" >
+            android:name=".Info"
+            android:label="@string/title_activity_info" >
             <intent-filter>
                 <action android:name="edu.android.intent.action.showtime" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".ActivityDate"
-            android:label="@string/title_activity_date" >
-            <intent-filter>
-                <action android:name="edu.android.intent.action.showdate" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".ActivityDateEx"
-            android:label="@string/title_activity_date_ex" >
-            <intent-filter>
                 <action android:name="edu.android.intent.action.showdate" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>

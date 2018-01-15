@@ -10,11 +10,11 @@ import android.widget.Button;
 
 public class MainActivity extends Activity implements View.OnClickListener {
 
+    /** Called when the activity is first created. */
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
         Button btnTime = (Button) findViewById(R.id.btnTime);
         Button btnDate = (Button) findViewById(R.id.btnDate);
@@ -39,4 +39,3 @@ public class MainActivity extends Activity implements View.OnClickListener {
         }
     }
 }
-
