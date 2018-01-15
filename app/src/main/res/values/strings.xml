@@ -19,4 +19,5 @@
     <string name="title_activity_date_ex">Extended Date</string>
     <string name="title_activity_info">Date/time info</string>
     <string name="title_activity_view">ViewActivity</string>
+    <string name="title_activity_name">NameActivity</string>
 </resources>

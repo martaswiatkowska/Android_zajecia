@@ -3,19 +3,16 @@ package com.example.marta.zadanie9;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 
 public class MainActivity extends Activity implements View.OnClickListener {
 
-    EditText etFName;
-    EditText etLName;
-
-    Button btnSubmit;
-
+    TextView tvName;
+    Button btnName;
 
     /** Called when the activity is first created. */
     @Override
@@ -23,20 +20,23 @@ public class MainActivity extends Activity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        etFName = (EditText) findViewById(R.id.etFName);
-        etLName = (EditText) findViewById(R.id.etLName);
+        tvName = (TextView) findViewById(R.id.tvName);
+        btnName = (Button) findViewById(R.id.btnName);
+        btnName.setOnClickListener(this);
 
-        btnSubmit = (Button) findViewById(R.id.btnSubmit);
-        btnSubmit.setOnClickListener(this);
+    }
 
+    @Override
+    public void onClick(View v) {
+        Intent intent = new Intent(this, NameActivity.class);
+        startActivityForResult(intent, 1);
     }
 
 
     @Override
-    public void onClick(View v) {
-        Intent intent = new Intent(this, ViewActivity.class);
-        intent.putExtra("fname", etFName.getText().toString());
-        intent.putExtra("lname", etLName.getText().toString());
-        startActivity(intent);
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (data == null) {return;}
+        String name = data.getStringExtra("name");
+        tvName.setText("Your name is " + name);
     }
 }
