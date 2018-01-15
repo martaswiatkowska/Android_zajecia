@@ -17,13 +17,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Info"
-            android:label="@string/title_activity_info" >
-            <intent-filter>
-                <action android:name="edu.android.intent.action.showtime" />
-                <action android:name="edu.android.intent.action.showdate" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
+            android:name=".ViewActivity"
+            android:label="@string/title_activity_view" >
         </activity>
     </application>
 

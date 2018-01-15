@@ -6,9 +6,16 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
 
 public class MainActivity extends Activity implements View.OnClickListener {
+
+    EditText etFName;
+    EditText etLName;
+
+    Button btnSubmit;
+
 
     /** Called when the activity is first created. */
     @Override
@@ -16,26 +23,20 @@ public class MainActivity extends Activity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button btnTime = (Button) findViewById(R.id.btnTime);
-        Button btnDate = (Button) findViewById(R.id.btnDate);
+        etFName = (EditText) findViewById(R.id.etFName);
+        etLName = (EditText) findViewById(R.id.etLName);
 
-        btnTime.setOnClickListener(this);
-        btnDate.setOnClickListener(this);
+        btnSubmit = (Button) findViewById(R.id.btnSubmit);
+        btnSubmit.setOnClickListener(this);
+
     }
+
 
     @Override
     public void onClick(View v) {
-        Intent intent;
-
-        switch(v.getId()) {
-            case R.id.btnTime:
-                intent = new Intent("edu.android.intent.action.showtime");
-                startActivity(intent);
-                break;
-            case R.id.btnDate:
-                intent = new Intent("edu.android.intent.action.showdate");
-                startActivity(intent);
-                break;
-        }
+        Intent intent = new Intent(this, ViewActivity.class);
+        intent.putExtra("fname", etFName.getText().toString());
+        intent.putExtra("lname", etLName.getText().toString());
+        startActivity(intent);
     }
 }
