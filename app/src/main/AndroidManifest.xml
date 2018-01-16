@@ -16,14 +16,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".ColorActivity"
-            android:label="@string/title_activity_color" >
-        </activity>
-        <activity
-            android:name=".AlignActivity"
-            android:label="@string/title_activity_align" >
-        </activity>
     </application>
 
 </manifest>
