@@ -16,137 +16,193 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
 public class MainActivity extends Activity implements View.OnClickListener {
-
     final String LOG_TAG = "myLogs";
 
-    Button btnAdd, btnRead, btnClear, btnUpd, btnDel;
-    EditText etName, etEmail, etID;
+    String name[] = { " Chiny ", " USA ", " Brazylia ", " Rosja ", " Japonia ",
+            "Niemcy", "Egipt", "Włochy", "Francja", "Kanada" };
+    int people[] = {1400, 311, 195, 142, 128, 82, 80, 60, 66, 35};
+    String region[] = { " Azja ", " Ameryka ", " Ameryka ", " Europa ", " Azja ",
+            "Europa", "Afryka", "Europa", "Europa", "Ameryka " };
+
+    Button btnAll, btnFunc, btnPeople, btnSort, btnGroup, btnHaving;
+    EditText etFunc, etPeople, etRegionPeople;
+    RadioGroup rgSort;
 
     DBHelper dbHelper;
+    SQLiteDatabase db;
 
-    /** Called when the activity is first created. */
+    /**
+     * Called when the activity is first created.
+     */
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        btnAdd = (Button) findViewById(R.id.btnAdd);
-        btnAdd.setOnClickListener(this);
+        btnAll = (Button) findViewById(R.id.btnAll);
+        btnAll.setOnClickListener(this);
 
-        btnRead = (Button) findViewById(R.id.btnRead);
-        btnRead.setOnClickListener(this);
+        btnFunc = (Button) findViewById(R.id.btnFunc);
+        btnFunc.setOnClickListener(this);
 
-        btnClear = (Button) findViewById(R.id.btnClear);
-        btnClear.setOnClickListener(this);
+        btnPeople = (Button) findViewById(R.id.btnPeople);
+        btnPeople.setOnClickListener(this);
 
-        btnUpd = (Button) findViewById(R.id.btnUpd);
-        btnUpd.setOnClickListener(this);
+        btnSort = (Button) findViewById(R.id.btnSort);
+        btnSort.setOnClickListener(this);
 
-        btnDel = (Button) findViewById(R.id.btnDel);
-        btnDel.setOnClickListener(this);
+        btnGroup = (Button) findViewById(R.id.btnGroup);
+        btnGroup.setOnClickListener(this);
 
-        etName = (EditText) findViewById(R.id.etName);
-        etEmail = (EditText) findViewById(R.id.etEmail);
-        etID = (EditText) findViewById(R.id.etID);
+        btnHaving = (Button) findViewById(R.id.btnHaving);
+        btnHaving.setOnClickListener(this);
 
-        // utworzyć obiekt do tworzenia i zarządzania wersjami bazy danych
+        etFunc = (EditText) findViewById(R.id.etFunc);
+        etPeople = (EditText) findViewById(R.id.etPeople);
+        etRegionPeople = (EditText) findViewById(R.id.etRegionPeople);
+
+        rgSort = (RadioGroup) findViewById(R.id.rgSort);
+
         dbHelper = new DBHelper(this);
+        // podłączamy się do bazy i ją tworzymy
+        db = dbHelper.getWritableDatabase();
+
+        // weryfikacji istnienia rekordów
+        Cursor c = db.query("mytable", null, null, null, null, null, null);
+        if (c.getCount() == 0) {
+            ContentValues cv = new ContentValues();
+            // wypełni tabelę
+            for (int i = 0; i < 10; i++) {
+                cv.put("name", name[i]);
+                cv.put("people", people[i]);
+                cv.put("region", region[i]);
+                Log.d(LOG_TAG, "id = " + db.insert("mytable", null, cv));
+            }
+        }
+        c.close();
+        dbHelper.close();
+        // emulować naciśnięcie przycisku  btnAll
+        onClick(btnAll);
+
     }
 
     public void onClick(View v) {
 
-        // tworzenie obiektu dla danych
-        ContentValues cv = new ContentValues();
+        // podłączamy się do bazy
+        db = dbHelper.getWritableDatabase();
 
-        // uzyskanie danych z pola wprowadzania
-        String name = etName.getText().toString();
-        String email = etEmail.getText().toString();
-        String id = etID.getText().toString();
+        // Dane z ekranu
+        String sFunc = etFunc.getText().toString();
+        String sPeople = etPeople.getText().toString();
+        String sRegionPeople = etRegionPeople.getText().toString();
 
-        // podłączenie do bazy danych
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        // zmienne dla  query
+        String[] columns = null;
+        String selection = null;
+        String[] selectionArgs = null;
+        String groupBy = null;
+        String having = null;
+        String orderBy = null;
 
+        // kursor
+        Cursor c = null;
+
+        // zdefiniować wciśnięty przycisk
         switch (v.getId()) {
-            case R.id.btnAdd:
-                Log.d(LOG_TAG, "--- Insert in mytable: ---");
-                // przygotowanie danych do wstawiania jako pary: nazwa kolumny -
-                // wartość
-                cv.put("name", name);
-                cv.put("email", email);
-                // wstawić rekord i dostać go ID
-                long rowID = db.insert("mytable", null, cv);
-                Log.d(LOG_TAG, "row inserted, ID = " + rowID);
+            // wszyscy rekordy
+            case R.id.btnAll:
+                Log.d(LOG_TAG, "--- Все записи ---");
+                c = db.query("mytable", null, null, null, null, null, null);
                 break;
-            case R.id.btnRead:
-                Log.d(LOG_TAG, "--- Rows in mytable: ---");
-                // robimy zapytanie wszystkich danych z tabeli mytable, dostajemy Cursor
-                Cursor c = db.query("mytable", null, null, null, null, null, null);
-
-                // umieścić pozycję kursora na pierwszy linie próby
-                // jeśli w próbie nie ma rekordów, return false
-                if (c.moveToFirst()) {
-
-                    // ustalać numery kolumnów wg nazwy w próbie
-                    int idColIndex = c.getColumnIndex("id");
-                    int nameColIndex = c.getColumnIndex("name");
-                    int emailColIndex = c.getColumnIndex("email");
-
-                    do {
-                        // uzyskania wartości według numerów
-                        //    kolumnów i napisać wszystko w log
-                        Log.d(LOG_TAG,
-                                "ID = " + c.getInt(idColIndex) + ", name = "
-                                        + c.getString(nameColIndex) + ", email = "
-                                        + c.getString(emailColIndex));
-                        // przejść do następnej linii
-                        // a jeśli nie ma następny (obecny - ostatnia),  false -
-                        // wyjść z pętli
-                    } while (c.moveToNext());
-                } else
-                    Log.d(LOG_TAG, "0 rows");
-                c.close();
+            // funkcja
+            case R.id.btnFunc:
+                Log.d(LOG_TAG, "--- Функция " + sFunc + " ---");
+                columns = new String[]{sFunc};
+                c = db.query("mytable", columns, null, null, null, null, null);
                 break;
-            case R.id.btnClear:
-                Log.d(LOG_TAG, "--- Clear mytable: ---");
-                // usunięcie wszystkich pozycje
-                int clearCount = db.delete("mytable", null, null);
-                Log.d(LOG_TAG, "deleted rows count = " + clearCount);
+            // populacja więcej niż
+            case R.id.btnPeople:
+                Log.d(LOG_TAG, "--- populacja więcej " + sPeople + " ---");
+                selection = "people > ?";
+                selectionArgs = new String[]{sPeople};
+                c = db.query("mytable", null, selection, selectionArgs, null, null,
+                        null);
                 break;
-            case R.id.btnUpd:
-                if (id.equalsIgnoreCase("")) {
-                    break;
+            // Populacja regionu
+            case R.id.btnGroup:
+                Log.d(LOG_TAG, "--- Populacja regionu ---");
+                columns = new String[]{"region", "sum(people) as people"};
+                groupBy = "region";
+                c = db.query("mytable", columns, null, null, groupBy, null, null);
+                break;
+            // Populacja regionu więcej niż
+            case R.id.btnHaving:
+                Log.d(LOG_TAG, "--- regiony z populacje więcej " + sRegionPeople
+                        + " ---");
+                columns = new String[]{"region", "sum(people) as people"};
+                groupBy = "region";
+                having = "sum(people) > " + sRegionPeople;
+                c = db.query("mytable", columns, null, null, groupBy, having, null);
+                break;
+
+            // sortowanie
+
+            case R.id.btnSort:
+                // sortowanie według
+                switch (rgSort.getCheckedRadioButtonId()) {
+                    // tytuł
+                    case R.id.rName:
+                        Log.d(LOG_TAG, "--- Сортировка по наименованию ---");
+                        orderBy = "name";
+                        break;
+                    // Populacja
+                    case R.id.rPeople:
+                        Log.d(LOG_TAG, "--- Сортировка по населению ---");
+                        orderBy = "people";
+                        break;
+                    // region
+                    case R.id.rRegion:
+                        Log.d(LOG_TAG, "--- Сортировка по региону ---");
+                        orderBy = "region";
+                        break;
                 }
-                Log.d(LOG_TAG, "--- Update mytabe: ---");
-                // przygotować wartości dla aktualizacji
-                cv.put("name", name);
-                cv.put("email", email);
-                // aktualizacja przez id
-                int updCount = db.update("mytable", cv, "id = ?",
-                        new String[] { id });
-                Log.d(LOG_TAG, "updated rows count = " + updCount);
-                break;
-            case R.id.btnDel:
-                if (id.equalsIgnoreCase("")) {
-                    break;
-                }
-                Log.d(LOG_TAG, "--- Delete from mytabe: ---");
-                // usunąć przez id
-                int delCount = db.delete("mytable", "id = " + id, null);
-                Log.d(LOG_TAG, "deleted rows count = " + delCount);
+                c = db.query("mytable", null, null, null, null, null, orderBy);
                 break;
         }
-        // zamknąć połączenie z bazą danych
+
+        if (c != null) {
+            if (c.moveToFirst()) {
+                String str;
+                do {
+                    str = "";
+                    for (String cn : c.getColumnNames()) {
+                        str = str.concat(cn + " = "
+                                + c.getString(c.getColumnIndex(cn)) + "; ");
+                    }
+                    Log.d(LOG_TAG, str);
+
+                } while (c.moveToNext());
+            }
+            c.close();
+        } else
+            Log.d(LOG_TAG, "Cursor is null");
+
         dbHelper.close();
     }
 
     class DBHelper extends SQLiteOpenHelper {
 
+        public static String CREATE_CONTACTS_TABLE = "CREATE TABLE IF NOT EXISTS " + DATABASE_TABLE + "("
+                + KEY_ROWID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + KEY_DESC + " TEXT, " + KEY_DATE + " TEXT, " + KEY_EVENT + " TEXT  )";
+
         public DBHelper(Context context) {
-            // konstruktor superklasa
+            // konstruktor superklasy
             super(context, "myDB", null, 1);
         }
 
@@ -154,14 +210,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
             Log.d(LOG_TAG, "--- onCreate database ---");
             // tworzenia tabeli z polami
             db.execSQL("create table mytable ("
-                    + "id integer primary key autoincrement,"
-                    + "name text,"
-                    + "email text" + ");");
+                    + "id integer primary key autoincrement," + "name text,"
+                    + "people integer," + "region text" + ");");
         }
 
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
         }
     }
-
 }
