@@ -24,13 +24,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     final String LOG_TAG = "myLogs";
 
-    Button btnAdd, btnRead, btnClear;
-    EditText etName, etEmail;
+    Button btnAdd, btnRead, btnClear, btnUpd, btnDel;
+    EditText etName, etEmail, etID;
 
     DBHelper dbHelper;
 
     /** Called when the activity is first created. */
-    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -44,28 +43,32 @@ public class MainActivity extends Activity implements View.OnClickListener {
         btnClear = (Button) findViewById(R.id.btnClear);
         btnClear.setOnClickListener(this);
 
+        btnUpd = (Button) findViewById(R.id.btnUpd);
+        btnUpd.setOnClickListener(this);
+
+        btnDel = (Button) findViewById(R.id.btnDel);
+        btnDel.setOnClickListener(this);
+
         etName = (EditText) findViewById(R.id.etName);
         etEmail = (EditText) findViewById(R.id.etEmail);
+        etID = (EditText) findViewById(R.id.etID);
 
         // utworzyć obiekt do tworzenia i zarządzania wersjami bazy danych
         dbHelper = new DBHelper(this);
     }
 
-
-    @Override
     public void onClick(View v) {
 
         // tworzenie obiektu dla danych
-
         ContentValues cv = new ContentValues();
 
         // uzyskanie danych z pola wprowadzania
         String name = etName.getText().toString();
         String email = etEmail.getText().toString();
+        String id = etID.getText().toString();
 
         // podłączenie do bazy danych
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-
 
         switch (v.getId()) {
             case R.id.btnAdd:
@@ -96,9 +99,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
                         // uzyskania wartości według numerów
                         //    kolumnów i napisać wszystko w log
                         Log.d(LOG_TAG,
-                                "ID = " + c.getInt(idColIndex) +
-                                        ", name = " + c.getString(nameColIndex) +
-                                        ", email = " + c.getString(emailColIndex));
+                                "ID = " + c.getInt(idColIndex) + ", name = "
+                                        + c.getString(nameColIndex) + ", email = "
+                                        + c.getString(emailColIndex));
                         // przejść do następnej linii
                         // a jeśli nie ma następny (obecny - ostatnia),  false -
                         // wyjść z pętli
@@ -109,16 +112,36 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 break;
             case R.id.btnClear:
                 Log.d(LOG_TAG, "--- Clear mytable: ---");
-                // удаляем все записи
+                // usunięcie wszystkich pozycje
                 int clearCount = db.delete("mytable", null, null);
                 Log.d(LOG_TAG, "deleted rows count = " + clearCount);
+                break;
+            case R.id.btnUpd:
+                if (id.equalsIgnoreCase("")) {
+                    break;
+                }
+                Log.d(LOG_TAG, "--- Update mytabe: ---");
+                // przygotować wartości dla aktualizacji
+                cv.put("name", name);
+                cv.put("email", email);
+                // aktualizacja przez id
+                int updCount = db.update("mytable", cv, "id = ?",
+                        new String[] { id });
+                Log.d(LOG_TAG, "updated rows count = " + updCount);
+                break;
+            case R.id.btnDel:
+                if (id.equalsIgnoreCase("")) {
+                    break;
+                }
+                Log.d(LOG_TAG, "--- Delete from mytabe: ---");
+                // usunąć przez id
+                int delCount = db.delete("mytable", "id = " + id, null);
+                Log.d(LOG_TAG, "deleted rows count = " + delCount);
                 break;
         }
         // zamknąć połączenie z bazą danych
         dbHelper.close();
     }
-
-
 
     class DBHelper extends SQLiteOpenHelper {
 
@@ -127,7 +150,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
             super(context, "myDB", null, 1);
         }
 
-        @Override
         public void onCreate(SQLiteDatabase db) {
             Log.d(LOG_TAG, "--- onCreate database ---");
             // tworzenia tabeli z polami
@@ -137,7 +159,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
                     + "email text" + ");");
         }
 
-        @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
         }
