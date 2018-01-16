@@ -73,8 +73,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
         // podłączamy się do bazy i ją tworzymy
         db = dbHelper.getWritableDatabase();
 
-        // weryfikacji istnienia rekordów
+        // weryfikacja istnienia rekordów
         Cursor c = db.query("mytable", null, null, null, null, null, null);
+        //Jeśli baza danych jest pusta to dodaj
         if (c.getCount() == 0) {
             ContentValues cv = new ContentValues();
             // wypełni tabelę
@@ -115,14 +116,14 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         // zdefiniować wciśnięty przycisk
         switch (v.getId()) {
-            // wszyscy rekordy
+            // wszystkie rekordy
             case R.id.btnAll:
-                Log.d(LOG_TAG, "--- Все записи ---");
+                Log.d(LOG_TAG, "--- Wszystkie elementy ---");
                 c = db.query("mytable", null, null, null, null, null, null);
                 break;
-            // funkcja
+            // pobranie wszystkich elementów z danej kolumny
             case R.id.btnFunc:
-                Log.d(LOG_TAG, "--- Функция " + sFunc + " ---");
+                Log.d(LOG_TAG, "--- Funkcja " + sFunc + " ---");
                 columns = new String[]{sFunc};
                 c = db.query("mytable", columns, null, null, null, null, null);
                 break;
@@ -134,14 +135,14 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 c = db.query("mytable", null, selection, selectionArgs, null, null,
                         null);
                 break;
-            // Populacja regionu
+            // Populacja wedłóg regionu
             case R.id.btnGroup:
                 Log.d(LOG_TAG, "--- Populacja regionu ---");
                 columns = new String[]{"region", "sum(people) as people"};
                 groupBy = "region";
                 c = db.query("mytable", columns, null, null, groupBy, null, null);
                 break;
-            // Populacja regionu więcej niż
+            // Pobiera populację wedłóg regionu więkrzą od podanej wartości
             case R.id.btnHaving:
                 Log.d(LOG_TAG, "--- regiony z populacje więcej " + sRegionPeople
                         + " ---");
@@ -158,17 +159,17 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 switch (rgSort.getCheckedRadioButtonId()) {
                     // tytuł
                     case R.id.rName:
-                        Log.d(LOG_TAG, "--- Сортировка по наименованию ---");
+                        Log.d(LOG_TAG, "--- Sortuj według nazwy ---");
                         orderBy = "name";
                         break;
                     // Populacja
                     case R.id.rPeople:
-                        Log.d(LOG_TAG, "--- Сортировка по населению ---");
+                        Log.d(LOG_TAG, "--- Sortuj według ludności ---");
                         orderBy = "people";
                         break;
                     // region
                     case R.id.rRegion:
-                        Log.d(LOG_TAG, "--- Сортировка по региону ---");
+                        Log.d(LOG_TAG, "--- Sortuj według regionu ---");
                         orderBy = "region";
                         break;
                 }
@@ -198,14 +199,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     class DBHelper extends SQLiteOpenHelper {
 
-        public static String CREATE_CONTACTS_TABLE = "CREATE TABLE IF NOT EXISTS " + DATABASE_TABLE + "("
-                + KEY_ROWID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + KEY_DESC + " TEXT, " + KEY_DATE + " TEXT, " + KEY_EVENT + " TEXT  )";
-
         public DBHelper(Context context) {
             // konstruktor superklasy
-            super(context, "myDB", null, 1);
+            super(context, "myDatabase", null, 1);
         }
 
+        @Override
         public void onCreate(SQLiteDatabase db) {
             Log.d(LOG_TAG, "--- onCreate database ---");
             // tworzenia tabeli z polami
@@ -213,7 +212,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                     + "id integer primary key autoincrement," + "name text,"
                     + "people integer," + "region text" + ");");
         }
-
+        @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
         }
